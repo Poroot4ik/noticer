@@ -1,9 +1,6 @@
 package com.example.noticer.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity // These tells Hibernate to make a table out of this class
@@ -12,18 +9,22 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String text;
-    private String tag;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "messageTag_id")
+    private MessageTag tag;
 
     public Message() {
     }
-    public Message(String tag) {
-        this.tag = tag;
-    }
-    public Message(String text, String tag) {
+
+    public Message(String text, MessageTag tag) {
         this.text = text;
         this.tag = tag;
     }
 
+    public String getTagName() {
+        return tag != null ? tag.getName() : "<none>";
+    }
 
     public void setText(String text) {
         this.text = text;
@@ -41,11 +42,11 @@ public class Message {
         this.id = id;
     }
 
-    public String getTag() {
+    public MessageTag getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(MessageTag tag) {
         this.tag = tag;
     }
 }

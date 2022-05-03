@@ -24,10 +24,10 @@
         <button type="submit">Найти</button>
     </form>
     <div th:each="row,iterRow : ${rows}" th:class="'row ' +  ${row}"> <!-- iteration over rows -->
-        <p th:text="${row.tag}"></p>
+        <p th:text="${row.getName()}"></p>
             <div class="seat" th:each="seat,iterSeat : ${seats}">  <!-- iteration over seats for each row -->
-                <input type="checkbox" th:id="${iterRow.count} + ${seat}" th:if= "${seat.tag.equals(row.tag)}">
-                <label th:for="${iterRow.count} + ${seat}" th:text="${seat.text}" th:if= "${seat.tag.equals(row.tag)}"></label>
+                <input type="checkbox" th:id="${iterRow.count} + ${seat}" th:if= "${seat.tag.equals(row)}">
+                <label th:for="${iterRow.count} + ${seat}" th:text="${seat.getText()}" th:if= "${seat.tag.equals(row)}"></label>
             </div>
     </div>
 </body>
