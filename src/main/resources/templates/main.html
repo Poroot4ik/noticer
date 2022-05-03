@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div>
+    <form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</div>
+<div>
+    <form th:action="@{/main}" method="post">
+        <input type="text" name="text" placeholder="Введите сообщение" />
+        <input type="text"  name="tag" placeholder="Тэг"/>
+        <button type="submit">Добавить</button>
+    </form>
+
+</div>
+<div>Список сообщений</div>
+<form th:action="@{/filter}" method="post">
+        <input type="text" name="filter" />
+        <button type="submit">Найти</button>
+    </form>
+    <div th:each="row,iterRow : ${rows}" th:class="'row ' +  ${row}"> <!-- iteration over rows -->
+        <p th:text="${row.tag}"></p>
+            <div class="seat" th:each="seat,iterSeat : ${seats}">  <!-- iteration over seats for each row -->
+                <input type="checkbox" th:id="${iterRow.count} + ${seat}" th:if= "${seat.tag.equals(row.tag)}">
+                <label th:for="${iterRow.count} + ${seat}" th:text="${seat.text}" th:if= "${seat.tag.equals(row.tag)}"></label>
+            </div>
+    </div>
+</body>
+</html>
