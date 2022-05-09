@@ -1,10 +1,15 @@
 package com.example.noticer.domain;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity // These tells Hibernate to make a table out of this class
 @Table(name = "messageTag")
+@Component()
+@Scope("prototype")
 public class MessageTag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,11 +25,6 @@ public class MessageTag {
 
     public MessageTag(String name) {
         this.name = name;
-    }
-
-    public MessageTag(String name, Set<Message> messages) {
-        this.name = name;
-        this.messages = messages;
     }
 
     public String getName() {

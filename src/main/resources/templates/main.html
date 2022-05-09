@@ -3,6 +3,12 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--<script th:inline="javascript">
+        function showAlert() {
+            alert("The button was clicked!");
+        }
+    </script>-->
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
 </head>
 <body>
 <div>
@@ -23,12 +29,15 @@
         <input type="text" name="filter" />
         <button type="submit">Найти</button>
     </form>
-    <div th:each="row,iterRow : ${rows}" th:class="'row ' +  ${row}"> <!-- iteration over rows -->
-        <p th:text="${row.getName()}"></p>
-            <div class="seat" th:each="seat,iterSeat : ${seats}">  <!-- iteration over seats for each row -->
-                <input type="checkbox" th:id="${iterRow.count} + ${seat}" th:if= "${seat.tag.equals(row)}">
-                <label th:for="${iterRow.count} + ${seat}" th:text="${seat.getText()}" th:if= "${seat.tag.equals(row)}"></label>
+    <div th:each="tag,iterRow : ${tags}" th:class="'tag ' +  ${tag}"> <!-- iteration over rows -->
+        <p th:text="${tag.getName()}"></p>
+            <div class="seat" th:each="message,iterSeat : ${messages}">  <!-- iteration over seats for each row -->
+                <input type="checkbox" th:id="${iterRow.count} + ${message}" th:if= "${message.getTag().equals(tag)}">
+                <label th:for="${iterRow.count} + ${message}" th:text="${message.getText()}" th:if= "${message.getTag().equals(tag)}"></label>
+                <a th:href="@{/main(id=${message.getId()})}" th:if= "${message.getTag().equals(tag)}"> &#10006;</a>
             </div>
     </div>
+<button type="button" th:onclick="showAlert()">Show Alert</button>
 </body>
+
 </html>
