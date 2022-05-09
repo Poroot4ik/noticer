@@ -30,9 +30,6 @@ public class MainController implements ApplicationContextAware {
     @Autowired
     private Message message;
 
- /*   @Autowired
-    private ApplicationContext applicationContext;*/
-
     private static ApplicationContext context;
 
     public static ApplicationContext getApplicationContext() {
@@ -68,16 +65,13 @@ public class MainController implements ApplicationContextAware {
         }
 
         if (messageTag == null) {
-
             messageTag = (MessageTag) context.getBean("messageTag");
             messageTag.setName(tag);
-          /*  messageTag = new MessageTag(tag);*/
         }
 
         if (text != null && !text.isEmpty()) {
             message.setText(text);
             message.setTag(messageTag);
-            /*message = new Message(text, messageTag);*/
         }
         else {
             return "main";
@@ -105,10 +99,14 @@ public class MainController implements ApplicationContextAware {
         Iterable<Message> messages;
         List<MessageTag> tags = new ArrayList<>();
 
+        if (filter.isEmpty()) {
+            viewMessageList(model);
+            return "main";
+        }
+
         messageTag = messageTagRepo.findByName(filter);
         tags.add(messageTag);
 
-        /*Iterable<Message> messages;*/
         if (messageTag != null) {
             messages = messageRepo.findByTag(messageTag);
         }
