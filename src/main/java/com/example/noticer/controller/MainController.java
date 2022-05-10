@@ -118,5 +118,4 @@ public class MainController implements ApplicationContextAware {
         return "main";
     }
 
-
 }

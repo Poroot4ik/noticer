@@ -37,7 +37,11 @@
                 <a th:href="@{/main(id=${message.getId()})}" th:if= "${message.getTag().equals(tag)}"> &#10006;</a>
             </div>
     </div>
-<button type="button" th:onclick="showAlert()">Show Alert</button>
+<form th:action="@{/delete}" method="post">
+<input type="text" name="filter" />
+    <button type="button" th:onclick="showAlert2()">Show Alert</button>
+</form>
+
 </body>
 
 </html>
