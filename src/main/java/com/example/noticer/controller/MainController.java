@@ -1,5 +1,6 @@
 package com.example.noticer.controller;
 
+import com.example.noticer.check.MyCheckObject;
 import com.example.noticer.domain.Message;
 import com.example.noticer.domain.MessageTag;
 import com.example.noticer.repos.MessageRepo;
@@ -12,9 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.context.ApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Controller
 public class MainController implements ApplicationContextAware {
@@ -27,8 +28,6 @@ public class MainController implements ApplicationContextAware {
     @Autowired
     private MessageTag messageTag;
 
-    @Autowired
-    private Message message;
 
     private static ApplicationContext context;
 
@@ -55,29 +54,26 @@ public class MainController implements ApplicationContextAware {
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
+    public String add(@ModelAttribute(value="message") Message message,@ModelAttribute(value="messageTag") MessageTag messageTag,Map<String, Object> model) {
 
-        if (tag != null && !tag.isEmpty()) {
-            messageTag = messageTagRepo.findByName(tag);
-        }
-        else {
-            return "main";
-        }
-
-        if (messageTag == null) {
-            messageTag = (MessageTag) context.getBean("messageTag");
-            messageTag.setName(tag);
+        if (!messageTag.getTagName().isEmpty()){
+            MessageTag tag = messageTagRepo.findByTagName(messageTag.getTagName());
+            if (tag != null) {
+                messageTag = tag;
+            }
         }
 
+        String text = message.getText();
         if (text != null && !text.isEmpty()) {
-            message.setText(text);
-            message.setTag(messageTag);
+            if (!messageTag.getTagName().isEmpty()) {
+                message.setTag(messageTag);
+            }
         }
-        else {
-            return "main";
+
+        if (!MyCheckObject.isObjectFieldsNull(message)) {
+            messageTagRepo.save(messageTag);
+            messageRepo.save(message);
         }
-        messageTagRepo.save(messageTag);
-        messageRepo.save(message);
 
         viewMessageList(model);
 
@@ -104,7 +100,7 @@ public class MainController implements ApplicationContextAware {
             return "main";
         }
 
-        messageTag = messageTagRepo.findByName(filter);
+        messageTag = messageTagRepo.findByTagName(filter);
         tags.add(messageTag);
 
         if (messageTag != null) {
@@ -116,6 +112,20 @@ public class MainController implements ApplicationContextAware {
         model.put("tags", tags);
         model.put("messages", messages);
         return "main";
+    }
+
+    @DeleteMapping("/main/{id}")
+    public String deleteMessage(@PathVariable Integer id, Map<String, Object> model) {
+        Optional<Message> message = messageRepo.findById(id);
+        MessageTag messageTag = message.get().getTag();
+        messageRepo.deleteById(id);
+        List<Message> messages =messageRepo.findByTag(messageTag);
+        if (messages.isEmpty()) {
+            messageTagRepo.deleteById(messageTag.getId());
+        }
+        viewMessageList(model);
+
+        return "redirect:/main";
     }
 
 }

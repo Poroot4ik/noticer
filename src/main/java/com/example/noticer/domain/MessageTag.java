@@ -6,16 +6,17 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import java.util.Set;
 
+
+@Component()
 @Entity // These tells Hibernate to make a table out of this class
 @Table(name = "messageTag")
-@Component()
 @Scope("prototype")
 public class MessageTag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String name;
+    private String tagName;
 
     @OneToMany(mappedBy = "tag",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<Message> messages;
@@ -24,15 +25,15 @@ public class MessageTag {
     }
 
     public MessageTag(String name) {
-        this.name = name;
+        this.tagName = name;
     }
 
-    public String getName() {
-        return name;
+    public String getTagName() {
+        return tagName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTagName(String name) {
+        this.tagName = name;
     }
 
     public Integer getId() {

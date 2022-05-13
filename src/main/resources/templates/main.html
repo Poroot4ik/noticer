@@ -8,39 +8,36 @@
             alert("The button was clicked!");
         }
     </script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{/js/main.js}"></script>
 </head>
 <body>
 <div>
     <form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
+        <input type="submit" value="Sign Out"/>
+    </form>
 </div>
 <div>
     <form th:action="@{/main}" method="post">
         <input type="text" name="text" placeholder="Введите сообщение" />
-        <input type="text"  name="tag" placeholder="Тэг"/>
+        <input type="text"  name="tagName" placeholder="Тэг"/>
         <button type="submit">Добавить</button>
     </form>
-
 </div>
 <div>Список сообщений</div>
 <form th:action="@{/filter}" method="post">
         <input type="text" name="filter" />
         <button type="submit">Найти</button>
     </form>
+
     <div th:each="tag,iterRow : ${tags}" th:class="'tag ' +  ${tag}"> <!-- iteration over rows -->
-        <p th:text="${tag.getName()}"></p>
+        <p th:text="${tag.getTagName()}"></p>
             <div class="seat" th:each="message,iterSeat : ${messages}">  <!-- iteration over seats for each row -->
                 <input type="checkbox" th:id="${iterRow.count} + ${message}" th:if= "${message.getTag().equals(tag)}">
                 <label th:for="${iterRow.count} + ${message}" th:text="${message.getText()}" th:if= "${message.getTag().equals(tag)}"></label>
-                <a th:href="@{/main(id=${message.getId()})}" th:if= "${message.getTag().equals(tag)}"> &#10006;</a>
+                <a th:href="@{/main}" th:onclick="'showAlert2('+${message.getId()}+')'" th:if= "${message.getTag().equals(tag)}"> &#10006; </a>
             </div>
     </div>
-<form th:action="@{/delete}" method="post">
-<input type="text" name="filter" />
-    <button type="button" th:onclick="showAlert2()">Show Alert</button>
-</form>
 
 </body>
 

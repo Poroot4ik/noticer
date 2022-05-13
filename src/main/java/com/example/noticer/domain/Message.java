@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
-@Entity // These tells Hibernate to make a table out of this class
 @Component()
+@Entity // These tells Hibernate to make a table out of this class
 @Scope("prototype")
 public class Message {
     @Id
@@ -27,7 +27,7 @@ public class Message {
     }
 
     public String getTagName() {
-        return tag != null ? tag.getName() : "<none>";
+        return tag != null ? tag.getTagName() : "<none>";
     }
 
     public Integer getId() {

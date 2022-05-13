@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 
 public interface MessageTagRepo extends CrudRepository<MessageTag, Integer> {
-    MessageTag findByName(String tag);
+    MessageTag findByTagName(String tag);
 }
