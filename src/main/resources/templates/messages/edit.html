@@ -6,11 +6,14 @@
 </head>
 <body>
 
+<!--<form th:method="PATCH" th:action="@{/messages/{id}(id=${message.getId()})}" th:object="${message}">-->
 <form th:method="PATCH" th:action="@{/messages/{id}(id=${message.getId()})}">
     <label for="message">Enter message: </label>
     <input type="text" th:field="*{message.text}" id="message"/>
+    <div style="color:red" th:if="${#fields.hasErrors('message.text')}" th:errors="*{message.text}">Name Error</div>
     <label for="message_tag">Enter tag: </label>
     <input type="text" th:field="*{message.tag.tagName}" id="message_tag"/>
+    <div style="color:red" th:if="${#fields.hasErrors('message.tag.tagName')}" th:errors="*{message.tag.tagName}">Name Error</div>
     <br/>
     <input type="submit" value="Update!"/>
 </form>

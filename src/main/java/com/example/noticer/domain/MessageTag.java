@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 
@@ -16,6 +17,7 @@ public class MessageTag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotEmpty(message = "Заполните тэг")
     private String tagName;
 
     @OneToMany(mappedBy = "tag",cascade=CascadeType.ALL,fetch = FetchType.LAZY)

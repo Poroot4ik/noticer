@@ -7,8 +7,10 @@ import com.example.noticer.repos.MessageRepo;
 import com.example.noticer.repos.MessageTagRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,7 +45,10 @@ public class MessageController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute(value="message") Message message, Map<String, Object> model) {
+    public String create(@ModelAttribute(value="message") @Valid Message message,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "messages/new";
 
         if (!message.getTagName().isEmpty()){
             MessageTag tag = messageTagRepo.findByTagName(message.getTagName());
@@ -52,10 +57,8 @@ public class MessageController {
             }
         }
 
-        if (!MyCheckObject.isObjectFieldsNull(message) && !message.getText().isEmpty() && !message.getTagName().isEmpty()) {
             messageTagRepo.save(message.getTag());
             messageRepo.save(message);
-        }
 
         return "redirect:/messages";
     }
@@ -67,7 +70,10 @@ public class MessageController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute(value="message") Message message) {
+    public String update(@ModelAttribute(value="message") @Valid Message message,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "messages/edit";
 
         if (!message.getTagName().isEmpty()){
             MessageTag tag = messageTagRepo.findByTagName(message.getTagName());
@@ -76,10 +82,8 @@ public class MessageController {
             }
         }
 
-        if (!MyCheckObject.isObjectFieldsNull(message) && !message.getText().isEmpty() && !message.getTagName().isEmpty()) {
             messageTagRepo.save(message.getTag());
             messageRepo.save(message);
-        }
 
         return "redirect:/messages";
     }
