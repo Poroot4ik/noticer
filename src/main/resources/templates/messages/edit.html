@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование сообщения</title>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/messages/{id}(id=${message.getId()})}">
+    <label for="message">Enter message: </label>
+    <input type="text" th:field="*{message.text}" id="message"/>
+    <label for="message_tag">Enter tag: </label>
+    <input type="text" th:field="*{message.tag.tagName}" id="message_tag"/>
+    <br/>
+    <input type="submit" value="Update!"/>
+</form>
+
+<!--<form th:method="PATCH" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
+    <label for="name">Enter name: </label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <br/>
+    <input type="submit" value="Update!"/>
+</form>-->
+
+</body>
+</html>

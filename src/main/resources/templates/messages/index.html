@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Сообщения</title>
+</head>
+<body>
+
+<div th:each="message : ${messages}">
+    <a th:href="@{/messages/{id}(id=${message.getId()})}" th:text="${message.getText()} +' '+ ${message.getTagName()}">message</a>
+</div>
+
+<br/>
+<hr/>
+
+<a href="/messages/new">Create new message</a>
+
+</body>
+</html>
