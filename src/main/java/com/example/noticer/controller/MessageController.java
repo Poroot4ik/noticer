@@ -27,7 +27,7 @@ public class MessageController {
 
     @GetMapping()
     public String index(Map<String, Object> model) {
-        model.put("messages", messageRepo.findAll());
+        model.put("tags", messageTagRepo.findAll());
         return "messages/index";
     }
 

@@ -1,24 +1,14 @@
 package com.example.noticer.controller;
 
-import com.example.noticer.check.MyCheckObject;
-import com.example.noticer.domain.Message;
 import com.example.noticer.domain.MessageTag;
 import com.example.noticer.repos.MessageRepo;
 import com.example.noticer.repos.MessageTagRepo;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.context.ApplicationContext;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Stream;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/main")
 public class MainController {
     @Autowired
     private MessageRepo messageRepo;
@@ -29,7 +19,7 @@ public class MainController {
     @Autowired
     private MessageTag messageTag;
 
-    @GetMapping()
+    @RequestMapping(value = {"/","/main"}, method = RequestMethod.GET)
     public String main() {
         return "redirect:messages";
     }
