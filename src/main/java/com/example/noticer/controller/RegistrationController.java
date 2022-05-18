@@ -2,8 +2,7 @@ package com.example.noticer.controller;
 
 import com.example.noticer.domain.Role;
 import com.example.noticer.domain.User;
-import com.example.noticer.repos.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.noticer.repos.UsersRepo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +12,12 @@ import java.util.Map;
 
 @Controller
 public class RegistrationController {
-    @Autowired
-    private UserRepo userRepo;
+
+    private final UsersRepo usersRepo;
+
+    public RegistrationController(UsersRepo usersRepo) {
+        this.usersRepo = usersRepo;
+    }
 
     @GetMapping("/registration")
     public String registration() {
@@ -23,7 +26,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
-        User userFromDb = userRepo.findByUsername(user.getUsername());
+        User userFromDb = usersRepo.findByUsername(user.getUsername());
 
         if (userFromDb != null) {
             model.put("message", "User exists!");
@@ -32,7 +35,7 @@ public class RegistrationController {
 
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
-        userRepo.save(user);
+        usersRepo.save(user);
         return "redirect:/login";
     }
 }

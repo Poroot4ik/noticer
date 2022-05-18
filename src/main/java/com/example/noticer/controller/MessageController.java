@@ -1,41 +1,40 @@
 package com.example.noticer.controller;
 
-import com.example.noticer.check.MyCheckObject;
 import com.example.noticer.domain.Message;
-import com.example.noticer.domain.MessageTag;
-import com.example.noticer.repos.MessageRepo;
-import com.example.noticer.repos.MessageTagRepo;
+import com.example.noticer.service.MessageService;
+import com.example.noticer.service.MessageTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/messages")
 public class MessageController {
-    @Autowired
-    private MessageRepo messageRepo;
+
+    private final MessageService messagesService;
+    private final MessageTagService messageTagService;
 
     @Autowired
-    private MessageTagRepo messageTagRepo;
-
-    @Autowired
-    private MessageTag messageTag;
+    public MessageController(MessageService messagesService, MessageTagService messageTagService) {
+        this.messagesService = messagesService;
+        this.messageTagService = messageTagService;
+    }
 
     @GetMapping()
     public String index(Map<String, Object> model) {
-        model.put("tags", messageTagRepo.findAll());
+/*        model.put("tags", messagesTagRepo.findAll());*/
+        model.put("tags", messageTagService.findAll());
         return "messages/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Integer id, Map<String, Object> model) {
-        model.put("message",messageRepo.findById(id).get());
+/*        model.put("message", messagesRepo.findById(id).get());*/
+        model.put("message", messagesService.findOne(id));
         return "messages/show";
     }
 
@@ -50,22 +49,24 @@ public class MessageController {
         if (bindingResult.hasErrors())
             return "messages/new";
 
-        if (!message.getTagName().isEmpty()){
-            MessageTag tag = messageTagRepo.findByTagName(message.getTagName());
+        /*if (!message.getTagName().isEmpty()){
+            MessageTag tag = messagesTagRepo.findByTagName(message.getTagName());
             if (tag != null) {
                 message.setTag(tag);
             }
         }
 
-            messageTagRepo.save(message.getTag());
-            messageRepo.save(message);
+            messagesTagRepo.save(message.getTag());
+            messagesRepo.save(message);*/
+        messagesService.save(message);
 
         return "redirect:/messages";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Map<String, Object> model, @PathVariable("id") Integer id) {
-        model.put("message", messageRepo.findById(id).get());
+       /* model.put("message", messagesRepo.findById(id).get());*/
+         model.put("message", messagesService.findOne(id));
         return "messages/edit";
     }
 
@@ -75,29 +76,23 @@ public class MessageController {
         if (bindingResult.hasErrors())
             return "messages/edit";
 
-        if (!message.getTagName().isEmpty()){
-            MessageTag tag = messageTagRepo.findByTagName(message.getTagName());
+        messagesService.update(message);
+/*        if (!message.getTagName().isEmpty()){
+            MessageTag tag = messagesTagRepo.findByTagName(message.getTagName());
             if (tag != null) {
                 message.setTag(tag);
             }
         }
 
-            messageTagRepo.save(message.getTag());
-            messageRepo.save(message);
+            messagesTagRepo.save(message.getTag());
+            messagesRepo.save(message);*/
 
         return "redirect:/messages";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Integer id, Map<String, Object> model) {
-        Optional<Message> message = messageRepo.findById(id);
-        MessageTag messageTag = message.get().getTag();
-        messageRepo.deleteById(id);
-        List<Message> messages =messageRepo.findByTag(messageTag);
-        if (messages.isEmpty()) {
-            messageTagRepo.deleteById(messageTag.getId());
-        }
-
+    public String delete(@PathVariable Integer id) {
+        messagesService.delete(id);
         return "redirect:/messages";
     }
 

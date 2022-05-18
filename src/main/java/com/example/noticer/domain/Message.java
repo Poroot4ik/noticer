@@ -18,7 +18,7 @@ public class Message {
     @NotEmpty(message = "Заполните сообщение")
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "messageTag_id")
     @Valid
     private MessageTag tag;
