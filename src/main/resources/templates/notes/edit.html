@@ -1,0 +1,94 @@
+<!--
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование сообщения</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/notes/{id}(id=${note.getId()})}">
+    <label for="title">Enter note: </label>
+    <input type="text" th:field="*{note.title}" id="title"/>
+    <div style="color:red" th:if="${#fields.hasErrors('note.title')}" th:errors="*{note.title}">Name Error</div>
+    &lt;!&ndash; <label for="entry_note">Enter note: </label>
+     <input type="text" th:field="*{entry.note.noteName}" id="entry_note"/>
+     <div style="color:red" th:if="${#fields.hasErrors('entry.note.noteName')}" th:errors="*{entry.note.noteName}">Name Error</div>&ndash;&gt;
+    <br/>
+    <input type="submit" value="Update!"/>
+</form>
+
+
+</body>
+</html>-->
+
+<!--
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заметка</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+</head>
+<body>
+
+<div class="row" data-masonry='{"percentPosition": true }'>
+    <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card">
+            <h5 class="card-title" th:text = "${note.getTitle()}">note</h5>
+            <div class="card-body" th:each="entry : ${note.getEntries()}">
+                <p class="card-text" th:text="${entry.getText()}">entry</p>
+            </div>
+            <a th:href="@{/notes/{id}/edit(id=${note.getId()})}">...</a>
+        </div>
+    </div>
+
+    <form th:method="DELETE" th:action="@{/notes/{id}(id=${note.getId()})}">
+        <input type="submit" value="Delete"/>
+    </form>
+</div>
+
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Новая заметка</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+</head>
+
+<body>
+
+<div class="row" data-masonry='{"percentPosition": true }'>
+    <div class="col-sm-6 col-lg-4 mb-4">
+        <form th:method="POST" th:action="@{/entries}">
+            <label for="title">Enter note: </label>
+            <input type="text" th:field="*{note.title}" id="title"/>
+            <div style="color:red" th:if="${#fields.hasErrors('note.title')}" th:errors="*{note.title}">Name Error</div>
+            <div class="card">
+                <div class="card-body" th:each="entry : ${note.getEntries()}">
+                    <p class="card-text" th:text="${entry.getText()}">entry</p>
+                    <a th:href="@{/entries/{id}(id=${entry.getId()})}">...</a>
+                </div>
+            </div>
+            <br/>
+            <label for="text">Enter text: </label>
+            <input type="text" th:field="*{entry.text}" id="text"/>
+            <div style="color:red" th:if="${#fields.hasErrors('entry.text')}" th:errors="*{entry.text}">Name Error</div>
+            <input type="submit" value="Add!"/>
+        </form>
+    </div>
+    <form th:method="DELETE" th:action="@{/notes/{id}(id=${note.getId()})}">
+        <input type="submit" value="Delete"/>
+    </form>
+</div>
+
+</body>
+</html>
+

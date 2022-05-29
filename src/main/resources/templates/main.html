@@ -15,7 +15,7 @@
 <div>
     <form th:action="@{/main}" method="post">
         <input type="text" name="text" placeholder="Введите сообщение" />
-        <input type="text"  name="tagName" placeholder="Тэг"/>
+        <input type="text"  name="noteName" placeholder="Тэг"/>
         <button type="submit">Добавить</button>
     </form>
 </div>
@@ -25,12 +25,12 @@
         <button type="submit">Найти</button>
     </form>
 
-    <div th:each="tag,iterRow : ${tags}" th:class="'tag ' +  ${tag}"> <!-- iteration over rows -->
-        <p th:text="${tag.getTagName()}"></p>
-            <div class="seat" th:each="message,iterSeat : ${messages}">  <!-- iteration over seats for each row -->
-                <input type="checkbox" th:id="${iterRow.count} + ${message}" th:if= "${message.getTag().equals(tag)}">
-                <label th:for="${iterRow.count} + ${message}" th:text="${message.getText()}" th:if= "${message.getTag().equals(tag)}"></label>
-                <a th:href="@{/main}" th:onclick="'showAlert2('+${message.getId()}+')'" th:if= "${message.getTag().equals(tag)}"> &#10006; </a>
+    <div th:each="note,iterRow : ${notes}" th:class="'note ' +  ${note}"> <!-- iteration over rows -->
+        <p th:text="${note.getNoteName()}"></p>
+            <div class="seat" th:each="entry,iterSeat : ${entries}">  <!-- iteration over seats for each row -->
+                <input type="checkbox" th:id="${iterRow.count} + ${entry}" th:if= "${entry.getNote().equals(note)}">
+                <label th:for="${iterRow.count} + ${entry}" th:text="${entry.getText()}" th:if= "${entry.getNote().equals(note)}"></label>
+                <a th:href="@{/main}" th:onclick="'showAlert2('+${entry.getId()}+')'" th:if= "${entry.getNote().equals(note)}"> &#10006; </a>
             </div>
     </div>
 

@@ -10,29 +10,34 @@ import javax.validation.constraints.NotNull;
 
 @Component()
 @Entity // These tells Hibernate to make a table out of this class
+@Table(name = "entry")
 @Scope("prototype")
-public class Message {
+public class Entry {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @NotEmpty(message = "Заполните сообщение")
+    @NotNull
     private String text;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "messageTag_id")
+    @JoinColumn(name = "note_id")
     @Valid
-    private MessageTag tag;
+    private Note note;
 
-    public Message() {
+    public Entry() {
     }
 
-    public Message(String text, MessageTag tag) {
+    public Entry(Integer id) {
+        this.id = id;
+    }
+
+    public Entry(String text, Note note) {
         this.text = text;
-        this.tag = tag;
+        this.note = note;
     }
 
-    public String getTagName() {
-        return tag != null ? tag.getTagName() : "<none>";
+    public String getTitle() {
+        return note != null ? note.getTitle() : "<none>";
     }
 
     public Integer getId() {
@@ -51,11 +56,11 @@ public class Message {
         this.text = text;
     }
 
-    public MessageTag getTag() {
-        return tag;
+    public Note getNote() {
+        return note;
     }
 
-    public void setTag(MessageTag tag) {
-        this.tag = tag;
+    public void setNote(Note note) {
+        this.note = note;
     }
 }

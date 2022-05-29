@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование сообщения</title>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/entries/{id}(id=${entry.getId()})}">
+    <label for="entry">Enter entry: </label>
+    <input type="text" th:field="*{entry.text}" id="entry"/>
+    <div style="color:red" th:if="${#fields.hasErrors('entry.text')}" th:errors="*{entry.text}">Name Error</div>
+    <label for="entry_note">Enter note: </label>
+    <input type="text" th:field="*{entry.note.noteName}" id="entry_note"/>
+    <div style="color:red" th:if="${#fields.hasErrors('entry.note.noteName')}" th:errors="*{entry.note.noteName}">Name Error</div>
+    <br/>
+    <input type="submit" value="Update!"/>
+</form>
+
+</body>
+</html>

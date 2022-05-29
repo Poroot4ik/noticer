@@ -9,7 +9,7 @@ public class MainController {
 
     @RequestMapping(value = {"/","/main"}, method = RequestMethod.GET)
     public String main() {
-        return "redirect:messages";
+        return "redirect:notes";
     }
 
 }

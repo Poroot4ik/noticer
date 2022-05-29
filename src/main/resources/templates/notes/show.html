@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Новая заметка</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
+            integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"
+            async></script>
+</head>
+
+<body>
+
+<div class="row" data-masonry='{"percentPosition": true }'>
+    <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card">
+
+            <form th:method="PATCH" th:action="@{/notes/{id}(id=${note.getId()})}">
+                <label for="title">Enter note: </label>
+                <input type="text" th:field="*{note.title}" id="title"/>
+                <div style="color:red" th:if="${#fields.hasErrors('note.title')}" th:errors="*{note.title}">Name
+                    Error
+                </div>
+                <div class="card-body" th:each="entry, i: *{note.entries}">
+                    <input type="text" th:field="*{note.entries[__${i.index}__].text}" th:id="${'entry-'+i.index}"/>
+                    <input type="hidden" th:field="*{note.entries[__${i.index}__].id}"/>
+                    <input type="hidden" th:field="*{note.entries[__${i.index}__].note.id}"/>
+                    <!--                        <div style="color:red" th:if="${#fields.hasErrors('note.entries[__${i.index}__].text')}" th:errors="*{note.entries[__${i.index}__].text}">Name Error</div>-->
+                    <input type="submit" value="..."/>
+                </div>
+                <!--                    <p class="card-text" th:text="${entry.getText()}">entry</p>
+                                    <a th:href="@{/entries/{note_id}/{id}(note_id=${note.getId()},id=${entry.getId()})}">...</a>-->
+
+                <br/>
+            </form>
+            <!--        <form th:method="POST" th:action="@{/entries/{note_id}(note_id=${note.getId()})}" th:if="${}">-->
+            <!--            <input type="text" th:field="*{newEntry.text}" id="text"/>-->
+            <!--            <div style="color:red" th:if="${#fields.hasErrors('newEntry.text')}" th:errors="*{newEntry.text}">Name Error</div>-->
+            <!--            <input type="submit" value="...!"/>-->
+            <!--        </form>-->
+
+        </div>
+    </div>
+    <form th:method="DELETE" th:action="@{/notes/{id}(id=${note.getId()})}">
+        <input type="submit" value="Delete"/>
+    </form>
+</div>
+
+</body>
+</html>

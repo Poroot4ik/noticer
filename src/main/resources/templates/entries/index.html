@@ -10,16 +10,16 @@
 <body>
 
 <div class="row" data-masonry='{"percentPosition": true }'>
-    <div class="col-sm-6 col-lg-4 mb-4" th:each="tag : ${tags}">
+    <div class="col-sm-6 col-lg-4 mb-4" th:each="note : ${notes}">
         <div class="card">
-            <h5 class="card-title" th:text = "${tag.getTagName()}">TAG</h5>
-            <div class="card-body" th:each="message : ${tag.getMessages()}">
-                <p class="card-text" th:text="${message.getText()}">MESSAGE</p>
-                <a th:href="@{/messages/{id}(id=${message.getId()})}">...</a>
+            <h5 class="card-title" th:text = "${note.getTitle()}">note</h5>
+            <div class="card-body" th:each="entry : ${note.getEntries()}">
+                <p class="card-text" th:text="${entry.getText()}">entry</p>
+                <a th:href="@{/entries/{id}(id=${entry.getId()})}">...</a>
             </div>
         </div>
     </div>
-    <a href="/messages/new">Create new message</a>
+    <a href="/entries/new">Create new entry</a>
 </div>
 
 </body>
