@@ -16,10 +16,12 @@ import java.util.Map;
 public class NoteController {
 
     private final NoteService noteService;
+    private final EntryService entryService;
 
     @Autowired
-    public NoteController(NoteService noteService) {
+    public NoteController(NoteService noteService, EntryService entryService) {
         this.noteService = noteService;
+        this.entryService = entryService;
     }
 
     @GetMapping()
@@ -29,42 +31,48 @@ public class NoteController {
     }
 
     @GetMapping("/{id}")
-    public String show(@ModelAttribute(value="newEntry") Note note, @ModelAttribute(value="newEntry") Entry newEntry, Map<String, Object> model) {
-/*        newEntry.setNote(note);
-        note.getEntries().add(newEntry);*/
+    public String show(@PathVariable(value="id") Integer id, @ModelAttribute(value="newEntry") Entry newEntry, Map<String, Object> model) {
+        Note note = noteService.findOne(id);
+        newEntry.setNote(note);
         model.put("note", note);
         return "notes/show";
     }
 
     @GetMapping("/new")
-    public String newEntry(@ModelAttribute(value="note") Note note, @ModelAttribute(value="entries") Note entries,Map<String, Object> model) {
+    public String newEntry(@ModelAttribute(value="note") Note note, @ModelAttribute(value="newEntry") Entry newEntry, Map<String, Object> model) {
         return "notes/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute(value="note") @Valid Note note,
+    public String create(@ModelAttribute(value="note") @Valid Note note, @ModelAttribute(value="newEntry") Entry newEntry,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "notes/new";
         noteService.save(note);
-        return "redirect:/notes/" + note.getId() +"?title="+note.getTitle();
+        newEntry.setNote(note);
+        if (!newEntry.getText().isEmpty()) {
+            entryService.save(newEntry);
+        }
+        return "redirect:/notes/" + note.getId();
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Map<String, Object> model, @PathVariable("id") Integer id, @ModelAttribute(value="entry") Entry entry) {
-        model.put("note", noteService.findOne(id));
-        return "redirect:/notes/" + id;
-    }
+//    @GetMapping("/{id}/edit")
+//    public String edit(Map<String, Object> model, @PathVariable("id") Integer id, @ModelAttribute(value="newEntry") Entry newEntry) {
+//        model.put("note", noteService.findOne(id));
+//        return "redirect:/notes/" + id;
+//    }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute(value="note") @Valid Note note, @ModelAttribute(value="entries") Entry entries,
+    public String update(@ModelAttribute(value="note") @Valid Note note, @ModelAttribute(value="newEntry") @Valid Entry newEntry,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "redirect:/notes/"+ note.getId();
 
         noteService.update(note);
-
-        return "redirect:/notes/" + note.getId() +"?title="+note.getTitle();
+        if (!newEntry.getText().isEmpty()) {
+            entryService.save(newEntry);
+        }
+        return "redirect:/notes/" + note.getId();
     }
 
     @DeleteMapping("/{id}")

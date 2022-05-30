@@ -44,9 +44,9 @@ public class EntryController {
     }*/
 
     @PostMapping("/{note_id}")
-    public String create(@PathVariable("note_id") Integer note_id, @ModelAttribute(value="entry") @Valid Entry entry,
+    public String create(@ModelAttribute(value="note") @Valid Note note, @ModelAttribute(value="entry") @Valid Entry entry,
                          BindingResult bindingResult) {
-        entry.setNote(noteService.findOne(note_id));
+        entry.setNote(note);
         if (bindingResult.hasErrors())
             return "redirect:/notes/" + entry.getNote().getId();
         entryService.save(entry);

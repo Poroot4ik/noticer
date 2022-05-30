@@ -18,36 +18,45 @@
 <div class="row" data-masonry='{"percentPosition": true }'>
     <div class="col-sm-6 col-lg-4 mb-4">
         <div class="card">
+            <div class="card-body">
+                <form th:method="PATCH" th:action="@{/notes/{id}(id=${note.getId()})}">
+                    <div class="col-10 mb-2">
+                        <label class="form-label" th:for="title">Title: </label>
+                        <input class="form-control" type="text" th:field="*{note.title}" th:id="title"/>
+                        <input type="hidden" th:field="*{note.id}"/>
+                    </div>
+                    <label class="form-label">Entries: </label>
+                    <div class="row" th:each="entry, i: *{note.entries}">
+                        <div class="col-10 mb-2">
+                            <input class="form-control" type="text" th:field="*{note.entries[__${i.index}__].text}"
+                                   th:id="${'entry-'+i.index}"/>
+                            <input type="hidden" th:field="*{note.entries[__${i.index}__].id}"/>
+                            <input type="hidden" th:field="*{note.entries[__${i.index}__].note.id}"/>
+                        </div>
+                        <div class="col-2 mb-2">
+                            <input class="btn btn-primary" type="submit" value="..."/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-10 mb-2">
+                            <input class="form-control" type="text" th:field="*{newEntry.text}"/>
+                            <input type="hidden" th:field="*{newEntry.id}"/>
+                            <input type="hidden" th:field="*{newEntry.note}"/>
+                        </div>
+                        <div class="col-2 mb-2">
+                            <input class="btn btn-primary" type="submit" value="..."/>
+                        </div>
+                    </div>
+                </form>
+                <form class="col-auto mb-2" th:method="DELETE" th:action="@{/notes/{id}(id=${note.getId()})}">
+                    <input class="btn btn-primary" type="submit" value="Delete"/>
+                </form>
+            </div>
 
-            <form th:method="PATCH" th:action="@{/notes/{id}(id=${note.getId()})}">
-                <label for="title">Enter note: </label>
-                <input type="text" th:field="*{note.title}" id="title"/>
-                <div style="color:red" th:if="${#fields.hasErrors('note.title')}" th:errors="*{note.title}">Name
-                    Error
-                </div>
-                <div class="card-body" th:each="entry, i: *{note.entries}">
-                    <input type="text" th:field="*{note.entries[__${i.index}__].text}" th:id="${'entry-'+i.index}"/>
-                    <input type="hidden" th:field="*{note.entries[__${i.index}__].id}"/>
-                    <input type="hidden" th:field="*{note.entries[__${i.index}__].note.id}"/>
-                    <!--                        <div style="color:red" th:if="${#fields.hasErrors('note.entries[__${i.index}__].text')}" th:errors="*{note.entries[__${i.index}__].text}">Name Error</div>-->
-                    <input type="submit" value="..."/>
-                </div>
-                <!--                    <p class="card-text" th:text="${entry.getText()}">entry</p>
-                                    <a th:href="@{/entries/{note_id}/{id}(note_id=${note.getId()},id=${entry.getId()})}">...</a>-->
-
-                <br/>
-            </form>
-            <!--        <form th:method="POST" th:action="@{/entries/{note_id}(note_id=${note.getId()})}" th:if="${}">-->
-            <!--            <input type="text" th:field="*{newEntry.text}" id="text"/>-->
-            <!--            <div style="color:red" th:if="${#fields.hasErrors('newEntry.text')}" th:errors="*{newEntry.text}">Name Error</div>-->
-            <!--            <input type="submit" value="...!"/>-->
-            <!--        </form>-->
 
         </div>
     </div>
-    <form th:method="DELETE" th:action="@{/notes/{id}(id=${note.getId()})}">
-        <input type="submit" value="Delete"/>
-    </form>
+
 </div>
 
 </body>
